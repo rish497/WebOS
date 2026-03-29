@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebOS - Windows-like OS in Chrome</title>
+    <link rel="stylesheet" href="css/desktop.css">
+</head>
+<body>
+    <div id="desktop">
+        <div id="taskbar">
+            <div id="start-button">⊞</div>
+            <div id="taskbar-apps"></div>
+            <div id="system-tray">
+                <div id="clock"></div>
+            </div>
+        </div>
+        <div id="desktop-icons">
+            <div class="icon" data-app="notepad">
+                <div class="icon-emoji">📝</div>
+                <span>Notepad</span>
+            </div>
+            <div class="icon" data-app="calculator">
+                <div class="icon-emoji">🧮</div>
+                <span>Calculator</span>
+            </div>
+            <div class="icon" data-app="browser">
+                <div class="icon-emoji">🌐</div>
+                <span>Browser</span>
+            </div>
+            <div class="icon" data-app="file-explorer">
+                <div class="icon-emoji">📁</div>
+                <span>File Explorer</span>
+            </div>
+        </div>
+        <div id="start-menu" class="hidden">
+            <div class="start-menu-item" data-app="notepad">Notepad</div>
+            <div class="start-menu-item" data-app="calculator">Calculator</div>
+            <div class="start-menu-item" data-app="browser">Browser</div>
+            <div class="start-menu-item" data-app="file-explorer">File Explorer</div>
+        </div>
+    </div>
+    <div id="window-list-popup" class="hidden"></div>
+    <div id="windows-container"></div>
+    <script src="js/desktop.js"></script>
+    <script src="js/window.js"></script>
+    <script src="js/apps.js"></script>
+</body>
+</html>
