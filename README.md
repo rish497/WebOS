@@ -4,6 +4,7 @@ A web-based operating system that mimics the Windows interface, running entirely
 
 ## Features
 - The File Explorer txt files DO NOT SAVE PROGRESS OR EDITS yet. That us for future updates.
+- The Notepads also dont save any progress once closed
 - Desktop with icons
 - Taskbar with start menu
 - Window management (minimize, maximize, close, drag)
