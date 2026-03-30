@@ -14,25 +14,6 @@ A web-based operating system that mimics the Windows interface, running entirely
   - Browser: Embedded web browser
   - File Explorer: Simulated file system
 
-## How to Run
-
-### Option 1: Direct Browser Open
-1. Open `index.html` directly in your web browser
-2. Note: Some features like the browser app may have restrictions
-
-### Option 2: Local Server (Recommended)
-1. Make sure Python 3 is installed
-2. Run `python server.py` (or `python3 server.py`)
-3. Open http://localhost:8000 in your browser
-4. This allows full functionality including the embedded browser
-
-## Browser Compatibility
-
-Works best in modern browsers that support:
-- CSS Grid and Flexbox
-- ES6 JavaScript features
-- iframe for the browser app
-
 ## Development
 
 The project structure:
@@ -48,6 +29,7 @@ The project structure:
 - Browser app has security restrictions for cross-origin content
 - No persistence (data doesn't save between sessions)
 - Calculator is basic (no advanced functions)
+- The NotePad Do not save progress/ edits
 
 ## Future Enhancements
 
