@@ -190,9 +190,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function maximizeWindow(windowDiv) {
         if (windowDiv.classList.contains('maximized')) {
+            // Restore original size and position
+            windowDiv.style.width = windowDiv.dataset.originalWidth + 'px';
+            windowDiv.style.height = windowDiv.dataset.originalHeight + 'px';
+            windowDiv.style.left = windowDiv.dataset.originalLeft + 'px';
+            windowDiv.style.top = windowDiv.dataset.originalTop + 'px';
             windowDiv.classList.remove('maximized');
-            // Restore original size and position (simplified)
         } else {
+            // Store original values
+            windowDiv.dataset.originalWidth = windowDiv.offsetWidth;
+            windowDiv.dataset.originalHeight = windowDiv.offsetHeight;
+            windowDiv.dataset.originalLeft = windowDiv.offsetLeft;
+            windowDiv.dataset.originalTop = windowDiv.offsetTop;
             windowDiv.classList.add('maximized');
         }
     }

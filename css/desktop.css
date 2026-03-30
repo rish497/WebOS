@@ -3,7 +3,10 @@ body {
     padding: 0;
     font-family: Arial, sans-serif;
     overflow: hidden;
-    background-image: url(images\windows-11-blue-stock-white-background-light-official-3840x2400-5616.jpg);
+    background-image: url("../images/windows-11-blue-stock-white-background-light-official-3840x2400-5616.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 #desktop {
@@ -215,6 +218,13 @@ body {
     display: none;
 }
 
+.window.maximized {
+    width: 100vw !important;
+    height: calc(100vh - 40px) !important;
+    left: 0 !important;
+    top: 0 !important;
+}
+
 #window-list-popup {
     position: absolute;
     background: linear-gradient(to bottom, #F0F0F0, #D0D0D0);
@@ -237,4 +247,10 @@ body {
 
 .window-list-item:last-child {
     border-right: none;
+}
+.window.maximized {
+    width: 100vw !important;
+    height: calc(100vh - 40px) !important; /* adjust for taskbar */
+    top: 0 !important;
+    left: 0 !important;
 }

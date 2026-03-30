@@ -7,7 +7,7 @@ import http.server
 import socketserver
 import os
 
-PORT = 8000
+PORT = 1029
 
 class Handler(http.server.SimpleHTTPRequestHandler):
     def end_headers(self):
