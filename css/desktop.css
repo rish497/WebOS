@@ -3,14 +3,13 @@ body {
     padding: 0;
     font-family: Arial, sans-serif;
     overflow: hidden;
-    background: linear-gradient(to bottom, #005A9E, #106EBE);
+    background-image: url(images\windows-11-blue-stock-white-background-light-official-3840x2400-5616.jpg);
 }
 
 #desktop {
     position: relative;
     width: 100vw;
     height: 100vh;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><rect width="20" height="20" fill="%23005A9E"/><circle cx="10" cy="10" r="1" fill="%23ffffff" opacity="0.1"/></svg>');
 }
 
 #taskbar {
