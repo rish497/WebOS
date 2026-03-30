@@ -3,7 +3,7 @@
 A web-based operating system that mimics the Windows interface, running entirely in your browser.
 
 ## Features
-
+- The File Explorer txt files DO NOT SAVE PROGRESS OR EDITS yet. That us for future updates.
 - Desktop with icons
 - Taskbar with start menu
 - Window management (minimize, maximize, close, drag)
