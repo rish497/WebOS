@@ -38,44 +38,33 @@ window.apps = {
         height: 300
     },
     browser: {
-        title: 'Browser',
-        icon: '🌐',
+        title: "Browser",
+        width: 900,
+        height: 600,
+        icon: "🌐",
         content: `
-            <div style="display: flex; margin-bottom: 10px;">
-                <input id="url-input" type="text" placeholder="Enter URL" style="flex: 1; padding: 5px;">
-                <button onclick="loadPage()">Go</button>
+            <div style="display:flex; gap:5px; padding:5px; background:#eee;">
+                <input id="browser-input" type="text" placeholder="Search or enter URL..." 
+                    style="flex:1; padding:5px;">
+                <button id="browser-go">Go</button>
             </div>
-            <iframe id="browser-frame" src="about:blank" style="width: 100%; height: calc(100% - 40px); border: 1px solid #ccc;"></iframe>
-        `,
-        width: 800,
-        height: 600
+            <iframe id="browser-frame" 
+                style="width:100%; height:calc(100% - 40px); border:none;">
+            </iframe>
+        `
+
     },
     'file-explorer': {
-        title: 'File Explorer',
-        icon: '📁',
-        content: `
-            <div style="display: flex; height: 100%;">
-                <div style="width: 200px; border-right: 1px solid #ccc; padding: 10px;">
-                    <h4>Folders</h4>
-                    <ul>
-                        <li>Desktop</li>
-                        <li>Documents</li>
-                        <li>Downloads</li>
-                        <li>Pictures</li>
-                    </ul>
-                </div>
-                <div style="flex: 1; padding: 10px;">
-                    <h4>Files</h4>
-                    <ul id="file-list">
-                        <li>sample.txt</li>
-                        <li>image.jpg</li>
-                        <li>document.pdf</li>
-                    </ul>
-                </div>
-            </div>
-        `,
+        title: "File Explorer",
         width: 600,
-        height: 400
+        height: 400,
+        icon: "📁",
+        content: `
+            <div style="display:flex; height:100%;">
+                <div id="folder-view" style="width:200px; border-right:1px solid #ccc; padding:5px;"></div>
+                <div id="file-view" style="flex:1; padding:10px;"></div>
+            </div>
+        `
     }
 };
 

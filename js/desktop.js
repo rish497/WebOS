@@ -1,5 +1,6 @@
 // Desktop functionality
 const windowsByApp = {}; // appName -> [windowDivs]
+let hideTimeout;
 
 document.addEventListener('DOMContentLoaded', function() {
     const desktop = document.getElementById('desktop');
@@ -8,7 +9,36 @@ document.addEventListener('DOMContentLoaded', function() {
     const desktopIcons = document.getElementById('desktop-icons');
     const taskbarApps = document.getElementById('taskbar-apps');
     const clock = document.getElementById('clock');
+    const windowListPopup = document.getElementById('window-list-popup');
+    windowListPopup.addEventListener("mouseenter", () => {
+            clearTimeout(hideTimeout);
+        });
 
+        windowListPopup.addEventListener("mouseleave", () => {
+            hideTimeout = setTimeout(hideWindowList, 300);
+        });
+        document.addEventListener("mousemove", (e) => {
+        const isOnTaskbar = e.target.closest(".taskbar-app");
+        const isOnPopup = e.target.closest("#window-list-popup");
+
+        if (!isOnTaskbar && !isOnPopup) {
+            hideTimeout = setTimeout(hideWindowList, 200);
+        } else {
+            clearTimeout(hideTimeout);
+        }
+    });
+    
+
+    const fileSystem = {
+        "Home": {
+            "readme.txt": "Welcome to WebOS!",
+            "notes.txt": "Type something here...",
+            "Projects": {
+                "game.js": "console.log('My game');",
+                "todo.txt": "1. Build OS\n2. Rule the world"
+            }
+        }
+    };
     // Update clock
     function updateClock() {
         const now = new Date();
@@ -83,6 +113,98 @@ document.addEventListener('DOMContentLoaded', function() {
         windowDiv.appendChild(header);
         windowDiv.appendChild(contentDiv);
         document.getElementById('windows-container').appendChild(windowDiv);
+        // Browser functionality
+    if (appName === "file-explorer") {
+        let currentPath = ["Home"];
+
+        const folderView = windowDiv.querySelector("#folder-view");
+        const fileView = windowDiv.querySelector("#file-view");
+
+        function getCurrentDir() {
+            let dir = fileSystem;
+            currentPath.forEach(p => dir = dir[p]);
+            return dir;
+        }
+
+        function render() {
+            const dir = getCurrentDir();
+
+            folderView.innerHTML = `<b>${currentPath.join("/")}</b><hr>`;
+            fileView.innerHTML = "";
+
+            // Back button
+            if (currentPath.length > 1) {
+                const back = document.createElement("div");
+                back.textContent = "⬅️ Back";
+                back.style.cursor = "pointer";
+                back.onclick = () => {
+                    currentPath.pop();
+                    render();
+                };
+                folderView.appendChild(back);
+            }
+
+            Object.keys(dir).forEach(name => {
+                const item = document.createElement("div");
+                item.style.cursor = "pointer";
+                item.style.padding = "4px";
+
+                if (typeof dir[name] === "object") {
+                    item.textContent = "📁 " + name;
+                    item.onclick = () => {
+                        currentPath.push(name);
+                        render();
+                    };
+                } else {
+                    item.textContent = "📄 " + name;
+                    item.onclick = () => {
+                        openFile(name, dir[name]);
+                    };
+                }
+
+                fileView.appendChild(item);
+            });
+        }
+
+        function openFile(name, content) {
+            createWindow("notepad", name, `<textarea style="width:100%; height:100%;">${content}</textarea>`, 500, 400);
+        }
+
+        render();
+    }
+    if (appName === "browser") {
+        setTimeout(() => {
+            const input = windowDiv.querySelector("#browser-input");
+            const button = windowDiv.querySelector("#browser-go");
+            const frame = windowDiv.querySelector("#browser-frame");
+
+            function loadSearch() {
+                let query = input.value.trim();
+                if (!query) return;
+
+                let url;
+
+                if (query.startsWith("http")) {
+                    url = query;
+                } else if (query.includes(".")) {
+                    url = "https://" + query;
+                } else {
+                    url = "https://duckduckgo.com/?q=" + encodeURIComponent(query);
+                }
+
+                window.open(url, "_blank");
+            }
+
+            button.addEventListener("click", loadSearch);
+
+            input.addEventListener("keydown", (e) => {
+                if (e.key === "Enter") loadSearch();
+            });
+
+            // Default page
+            
+        }, 100);
+    }
 
         // Manage taskbar
         updateTaskbar(appName, icon, windowDiv);
@@ -123,22 +245,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // Click to show list if multiple, else toggle
-        taskbarApp.addEventListener('click', () => {
-            const windows = windowsByApp[appName];
-            if (windows.length > 1) {
-                showWindowList(taskbarApp, appName);
-            } else {
-                // Toggle the single window
-                const windowDiv = windows[0];
-                if (windowDiv.classList.contains('minimized')) {
-                    windowDiv.classList.remove('minimized');
-                    bringToFront(windowDiv);
-                    updateTaskbarAppActive(appName);
-                } else {
-                    minimizeWindow(windowDiv);
-                }
-            }
+        taskbarApp.addEventListener("mouseenter", () => {
+            clearTimeout(hideTimeout);
+            showWindowPreview(taskbarApp, appName);
         });
+        
     }
 
     function closeWindow(windowDiv) {
@@ -155,28 +266,47 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    function showWindowList(taskbarApp, appName) {
+    function showWindowPreview(taskbarApp, appName) {
         const windows = windowsByApp[appName];
-        if (windows.length <= 1) return;
+        if (!windows || windows.length === 0) return;
 
-        windowListPopup.innerHTML = '';
+        windowListPopup.innerHTML = "";
+
         windows.forEach((w, i) => {
-            const item = document.createElement('div');
-            item.className = 'window-list-item';
-            item.textContent = `${window.apps[appName].title} ${i + 1}`;
-            item.addEventListener('click', () => {
-                w.classList.remove('minimized');
+            const item = document.createElement("div");
+            item.className = "window-preview-item";
+
+            item.innerHTML = `
+                <div class="preview-title">
+                    ${window.apps[appName].title} ${windows.length > 1 ? i + 1 : ""}
+                </div>
+            `;
+
+            item.addEventListener("click", () => {
+                w.classList.remove("minimized");
                 bringToFront(w);
                 updateTaskbarAppActive(appName);
                 hideWindowList();
             });
+
             windowListPopup.appendChild(item);
         });
 
         const rect = taskbarApp.getBoundingClientRect();
-        windowListPopup.style.top = (rect.top - 40) + 'px'; // approximate height
-        windowListPopup.style.left = rect.left + 'px';
-        windowListPopup.classList.remove('hidden');
+        windowListPopup.style.bottom = "60px";
+        const popupWidth = windowListPopup.offsetWidth;
+        const iconCenter = rect.left + rect.width / 2;
+
+        windowListPopup.style.left = (iconCenter - popupWidth / 2) + "px";
+
+        windowListPopup.classList.remove("hidden");
+        // wait for DOM to render
+        requestAnimationFrame(() => {
+            const popupWidth = windowListPopup.offsetWidth;
+            const iconCenter = rect.left + rect.width / 2;
+
+            windowListPopup.style.left = (iconCenter - popupWidth / 2) + "px";
+        });
     }
 
     function hideWindowList() {
